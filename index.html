@@ -3,127 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Automania | Welcome</title>
+    <title>Automania | Apply for Access</title>
     <style>
-        /* --- CORE AESTHETICS (Shared Across All Pages) --- */
         :root {
             --bg-color: #000000;
             --glass-bg: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-color: #0A84FF; /* Apple Blue */
+            --accent-color: #32D74B; /* Green for Register */
             --text-primary: #ffffff;
             --text-secondary: #86868b;
         }
-
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background-color: var(--bg-color); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        .glass-card {
+            width: 85%; max-width: 400px; background: var(--glass-bg);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
-
-        /* Ambient Background Glow */
-        .glow-sphere {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(10, 132, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: -1;
-            animation: float 10s infinite ease-in-out;
+        h2 { margin-top: 0; font-size: 24px; margin-bottom: 10px; text-align: center; }
+        .sub-text { text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 25px; }
+        
+        label { display: block; color: var(--text-secondary); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        input {
+            width: 100%; padding: 16px; background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            color: white; font-size: 16px; box-sizing: border-box; outline: none; margin-bottom: 20px;
         }
-
-        .container {
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            z-index: 10;
+        input:focus { border-color: var(--accent-color); background: rgba(0,0,0,0.5); }
+        
+        .btn-submit {
+            width: 100%; padding: 16px; background: white;
+            color: black; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-
-        /* --- TYPOGRAPHY --- */
-        h1 {
-            font-size: 36px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 10px;
-            background: linear-gradient(180deg, #fff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p {
-            color: var(--text-secondary);
-            font-size: 17px;
-            line-height: 1.5;
-            margin-bottom: 40px;
-        }
-
-        /* --- COMPONENTS --- */
-        .logo-placeholder {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #0A84FF, #00d4ff);
-            border-radius: 24px;
-            margin: 0 auto 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 10px 30px rgba(10, 132, 255, 0.3);
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            border-radius: 16px;
-            font-size: 17px;
-            font-weight: 600;
-            text-decoration: none;
-            margin-bottom: 15px;
-            transition: transform 0.2s, opacity 0.2s;
-            box-sizing: border-box;
-        }
-
-        .btn-primary {
-            background: var(--accent-color);
-            color: white;
-            box-shadow: 0 4px 20px rgba(10, 132, 255, 0.25);
-        }
-
-        .btn-secondary {
-            background: var(--glass-bg);
-            color: white;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-        }
-
-        .btn:active { transform: scale(0.98); opacity: 0.8; }
-
-        @keyframes float { 0% { transform: translate(-50%, 0px); } 50% { transform: translate(-50%, 20px); } 100% { transform: translate(-50%, 0px); } }
+        .btn-submit:hover { background: #eee; transform: scale(1.02); }
+        
+        .login-link { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-secondary); }
+        .login-link a { color: var(--text-primary); text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <div class="glow-sphere"></div>
+    <div class="glass-card">
+        <h2>Join Protocol</h2>
+        <p class="sub-text">Initialize your Automania Agent Profile.</p>
+        
+        <form onsubmit="event.preventDefault(); handleSubmit();">
+            <label>Full Name</label>
+            <input type="text" id="full_name" placeholder="John Doe" required>
 
-    <div class="container">
-        <div class="logo-placeholder">A</div>
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="john@example.com" required>
+            
+            <button type="submit" id="submit-btn" class="btn-submit">Generate Agent ID</button>
+        </form>
 
-        <h1>Automania</h1>
-        <p>The central nervous system for your business automation. Track agents, monitor metrics, and control workflows.</p>
-
-        <a href="login.html" class="btn btn-primary">Login to Network</a>
-        <a href="register.html" class="btn btn-secondary">Create Account</a>
+        <div class="login-link">
+            Already have an Agent ID? <a href="login.html">Login here</a>
+        </div>
     </div>
+
+    <script>
+        async function handleSubmit() {
+            const btn = document.getElementById('submit-btn');
+            const nameInput = document.getElementById('full_name').value;
+            const emailInput = document.getElementById('email').value;
+
+            btn.innerText = "Processing...";
+            btn.style.opacity = "0.7";
+
+            try {
+                // --- PRODUCTION URL (Live) ---
+                const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        full_name: nameInput, 
+                        email: emailInput 
+                    })
+                });
+
+                if (response.ok) {
+                    // Redirect to the Success Page
+                    window.location.href = 'success.html';
+                } else {
+                    alert("System Error: Could not connect to Automania Servers.");
+                    btn.innerText = "Try Again";
+                    btn.style.opacity = "1";
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Connection Failed. Please check your internet.");
+                btn.innerText = "Generate Agent ID";
+                btn.style.opacity = "1";
+            }
+        }
+    </script>
 
 </body>
 </html>
