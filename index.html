@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Automania App</title>
     <style>
-        /* --- PREMIUM STYLING (Automania Aesthetic) --- */
+        /* --- PREMIUM STYLING --- */
         :root {
             --bg-color: #000000;
             --glass-bg: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-color: #0A84FF; /* Apple Blue */
-            --success-color: #32D74B; /* Apple Green */
+            --accent-color: #0A84FF;
+            --success-color: #32D74B;
             --text-primary: #ffffff;
             --text-secondary: #86868b;
         }
@@ -28,7 +28,6 @@
             justify-content: center;
         }
 
-        /* Ambient Glow */
         .glow-sphere {
             position: absolute;
             width: 300px;
@@ -40,7 +39,6 @@
             animation: float 10s infinite ease-in-out;
         }
 
-        /* --- APP LAYOUT --- */
         .app-screen {
             width: 100%;
             max-width: 450px;
@@ -58,11 +56,9 @@
             padding-bottom: 80px;
         }
 
-        /* --- PAGES --- */
         .page { display: none; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
 
-        /* --- TYPOGRAPHY --- */
         h1 {
             font-size: 32px;
             font-weight: 700;
@@ -76,7 +72,6 @@
         h2 { font-size: 22px; font-weight: 600; margin-bottom: 20px; }
         p { color: var(--text-secondary); font-size: 16px; line-height: 1.5; margin-bottom: 24px; }
 
-        /* --- COMPONENTS --- */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -97,21 +92,23 @@
             letter-spacing: 1px;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 16px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             color: white;
+            font-family: inherit;
             font-size: 16px;
             box-sizing: border-box;
             outline: none;
             margin-bottom: 16px;
             transition: 0.3s;
+            resize: none; 
         }
 
-        input:focus { border-color: var(--accent-color); background: rgba(0, 0, 0, 0.5); }
+        input:focus, textarea:focus { border-color: var(--accent-color); background: rgba(0, 0, 0, 0.5); }
 
         .btn-primary {
             width: 100%;
@@ -124,11 +121,10 @@
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
-            transition: transform 0.1s, background-color 0.3s;
+            transition: transform 0.1s;
         }
         .btn-primary:active { transform: scale(0.97); }
 
-        /* --- BOTTOM NAV --- */
         .bottom-nav {
             position: fixed;
             bottom: 20px;
@@ -184,9 +180,19 @@
                         <span style="color: #32D74B; font-weight: bold;">Online</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
-                        <span style="color: #86868b;">Tasks Completed</span>
-                        <span style="color: #fff; font-weight: bold;">1,240</span>
+                        <span style="color: #86868b;">Clearance Level</span>
+                        <span style="color: #fff; font-weight: bold;">Level 1</span>
                     </div>
+                </div>
+
+                <div id="msg-terminal" class="glass-panel" style="display:none;">
+                    <h3>Secure Command Line</h3>
+                    <p style="margin-bottom:10px; font-size:14px;">Direct uplink to Central Brain.</p>
+                    
+                    <textarea id="queryInput" rows="3" placeholder="Enter query or status report..."></textarea>
+                    
+                    <button id="send-msg-btn" class="btn-primary" onclick="sendQuery()">Transmit</button>
+                    <p id="msg-feedback" style="margin-top:10px; font-size:13px; color:#86868b; text-align:center;"></p>
                 </div>
 
                 <div id="cta-card" class="glass-panel" style="text-align: center;">
@@ -234,6 +240,10 @@
     </div>
 
     <script>
+        // --- CONFIGURATION ---
+        // Your Production URL
+        const n8n_url = 'https://my-n8n-server-npma.onrender.com/webhook/register';
+
         // 1. Navigation Logic
         function switchTab(tabName) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -248,25 +258,22 @@
             }
         }
 
-        // 2. The Core Handshake Logic (Talks to n8n)
+        // 2. Registration Logic (First Time)
         async function submitForm() {
             const btn = document.getElementById('submit-btn');
             const feedback = document.getElementById('form-feedback');
             
             const userData = {
+                type: 'registration_request', // We tag it so n8n knows what it is
                 name: document.getElementById("name").value,
                 email: document.getElementById("email").value,
                 interest: document.getElementById("interest").value
             };
 
-            // Loading State
-            btn.innerText = "Connecting to Server...";
+            btn.innerText = "Connecting...";
             btn.style.opacity = "0.7";
 
             try {
-                // --- YOUR N8N URL ---
-                const n8n_url = 'https://my-n8n-server-npma.onrender.com/webhook/register';
-
                 const response = await fetch(n8n_url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -274,54 +281,92 @@
                 });
 
                 const result = await response.json();
-                console.log("n8n Response:", result);
 
-                // Check if we got an ID back
                 if (result.userID) {
-                    // Success! Save ID to phone memory
+                    // SAVE ID FOREVER
                     localStorage.setItem('automania_id', result.userID);
                     localStorage.setItem('automania_name', userData.name);
 
-                    // UI Success
                     btn.innerText = "Handshake Complete";
-                    btn.style.backgroundColor = "#32D74B"; // Green
+                    btn.style.backgroundColor = "#32D74B"; 
                     feedback.innerText = "Identity Assigned: " + result.userID;
-                    feedback.style.color = "#32D74B";
-
-                    // Auto-redirect to home
+                    
                     setTimeout(() => {
                         updateDashboard();
                         switchTab('home');
                     }, 2000);
-                } else {
-                    throw new Error("No ID returned");
                 }
 
             } catch (error) {
                 console.error('Error:', error);
                 btn.innerText = "Connection Failed";
-                btn.style.backgroundColor = "#ff3b30"; // Red
-                feedback.innerText = "System Offline. Check CORS or Server.";
-                feedback.style.color = "#ff3b30";
+                btn.style.backgroundColor = "#ff3b30";
+                feedback.innerText = "Check Console for CORS errors.";
             }
         }
 
-        // 3. Persistence Logic (Checks memory on load)
+        // 3. New Message Logic (The Test)
+        async function sendQuery() {
+            const msgBtn = document.getElementById('send-msg-btn');
+            const feedback = document.getElementById('msg-feedback');
+            const messageText = document.getElementById('queryInput').value;
+            
+            // GET THE ID FROM STORAGE
+            const myID = localStorage.getItem('automania_id');
+
+            if (!messageText) return;
+
+            msgBtn.innerText = "Transmitting...";
+            
+            // The Payload: Message + The ID
+            const payload = {
+                type: 'user_message',
+                userID: myID,            // <--- HERE IS THE PASSPORT
+                message: messageText,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                // Using the same webhook for testing purposes
+                await fetch(n8n_url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Success Visuals
+                msgBtn.innerText = "Sent";
+                msgBtn.style.backgroundColor = "#32D74B";
+                feedback.innerText = "Packet delivered with ID: " + myID;
+                
+                setTimeout(() => {
+                    msgBtn.innerText = "Transmit";
+                    msgBtn.style.backgroundColor = "#0A84FF";
+                    document.getElementById('queryInput').value = ""; // Clear box
+                }, 2000);
+
+            } catch (error) {
+                msgBtn.innerText = "Error";
+                feedback.innerText = "Transmission failed.";
+            }
+        }
+
+        // 4. Persistence Logic (Runs on Load)
         function updateDashboard() {
             const savedName = localStorage.getItem('automania_name');
             const savedID = localStorage.getItem('automania_id');
 
             if (savedName && savedID) {
-                // Personalize the Home Screen
+                // Update text
                 document.getElementById('welcome-title').innerText = "Welcome, " + savedName.split(' ')[0];
-                document.getElementById('welcome-msg').innerText = "Agent ID: " + savedID + " • Clearance: Level 1";
+                document.getElementById('welcome-msg').innerText = "Agent ID: " + savedID;
                 
-                // Hide the Register Button
+                // Hide Register Button, Show Message Terminal
                 document.getElementById('cta-card').style.display = 'none';
+                document.getElementById('msg-terminal').style.display = 'block';
             }
         }
 
-        // Run on startup
         window.onload = updateDashboard;
     </script>
 </body>
