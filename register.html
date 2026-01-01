@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Automania | Register</title>
+    <title>Automania | Register (Test Mode)</title>
     <style>
         :root { --bg-color: #000000; --glass-bg: rgba(255, 255, 255, 0.08); --glass-border: rgba(255, 255, 255, 0.1); --accent-color: #32D74B; --text-primary: #ffffff; --text-secondary: #86868b; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background-color: var(--bg-color); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -20,7 +20,7 @@
 <body>
     <a href="index.html" class="back-link">← Cancel</a>
     <div class="glass-card">
-        <h2>New Agent</h2>
+        <h2>New Agent (Test)</h2>
         <form onsubmit="event.preventDefault(); handleRegister();">
             <label>Full Name</label>
             <input type="text" id="reg-name" placeholder="John Doe" required>
@@ -51,8 +51,9 @@
             btn.innerText = "Creating Identity...";
             
             try {
-                // --- CHANNEL A: REGISTER ---
-                const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook/register', {
+                // --- CHANNEL A: REGISTER (TEST URL) ---
+                // We are using the 'webhook-test' URL to debug in n8n UI
+                const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook-test/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -72,7 +73,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                feedback.innerText = "Registration Failed. Check Server.";
+                feedback.innerText = "Test Failed. Is n8n listening?";
                 feedback.style.display = "block";
                 btn.innerText = "Try Again";
             }
