@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Automania | Register</title>
+    <style>
+        /* --- REUSED STYLES --- */
+        :root {
+            --bg-color: #000000;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-color: #32D74B; /* Apple Green for "New" */
+            --text-primary: #ffffff;
+            --text-secondary: #86868b;
+        }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background-color: var(--bg-color); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        .glass-card {
+            width: 85%;
+            max-width: 400px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        h2 { margin-top: 0; font-size: 24px; margin-bottom: 20px; text-align: center; }
+        
+        label { display: block; color: var(--text-secondary); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+
+        input, select {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            margin-bottom: 20px;
+        }
+        input:focus { border-color: var(--accent-color); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-color);
+            color: black; /* Dark text on Green looks sharper */
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 40px;
+            left: 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-link">← Cancel</a>
+
+    <div class="glass-card">
+        <h2>New Agent</h2>
+        <form>
+            <label>Full Name</label>
+            <input type="text" placeholder="John Doe">
+
+            <label>Email Address</label>
+            <input type="email" placeholder="john@example.com">
+
+            <label>Service Plan</label>
+            <select style="color: white;">
+                <option>Standard Automation</option>
+                <option>Premium AI Agents</option>
+                <option>Enterprise</option>
+            </select>
+
+            <button type="button" class="btn-submit">Initialize Handshake</button>
+        </form>
+    </div>
+
+</body>
+</html>
