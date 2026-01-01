@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Automania | Login</title>
     <style>
-        /* --- REUSED STYLES --- */
         :root {
             --bg-color: #000000;
             --glass-bg: rgba(255, 255, 255, 0.08);
@@ -51,7 +50,7 @@
             <input type="email" id="login-email" placeholder="neo@matrix.com" required>
 
             <label>Agent ID (Password)</label>
-            <input type="text" id="login-id" placeholder="JOH 123" required>
+            <input type="text" id="login-id" placeholder="AND 123" required>
 
             <button type="submit" id="submit-btn" class="btn-submit">Restore Session</button>
             <p id="feedback" class="error-msg"></p>
@@ -65,21 +64,17 @@
             const idInput = document.getElementById('login-id').value;
             const emailInput = document.getElementById('login-email').value;
 
-            // --- REMOVED THE "AGT" CHECK ---
-            // Because your IDs are now dynamic (e.g., AND 123), checking for "AGT" 
-            // would block valid users. We let the server decide if it's correct.
-
             btn.innerText = "Verifying...";
             feedback.style.display = "none";
 
             try {
-                // --- UPDATE 1: Using the TEST Webhook URL ---
-                const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook-test/login', {
+                // --- PRODUCTION URL (Live) ---
+                const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         email: emailInput, 
-                        agent_id: idInput  // --- UPDATE 2: Changed 'userID' to 'agent_id' to match DB ---
+                        agent_id: idInput 
                     })
                 });
 
@@ -109,7 +104,6 @@
                 feedback.innerText = "ID or Email not found.";
                 feedback.style.display = "block";
                 
-                // Reset button after 2 seconds
                 setTimeout(() => {
                     btn.innerText = "Restore Session";
                     btn.style.backgroundColor = "#0A84FF";
