@@ -165,32 +165,29 @@
 
     <script>
         // 1. INTELLIGENT NAME LOADER
-        // This makes the code work in BOTH n8n and as a static file.
         function loadUser() {
-            // A. Check URL Parameters (e.g., ?name=Pule)
+            // Check URL Parameters
             const urlParams = new URLSearchParams(window.location.search);
             const urlName = urlParams.get('name');
 
-            // B. Check Local Storage (if they logged in via your login page)
+            // Check Local Storage
             const localName = localStorage.getItem('automania_name');
 
-            // C. Fallback to "Agent" if nothing is found
+            // Fallback
             const finalName = urlName || localName || "Agent";
 
-            // Update the screen safely (No {{ }} errors possible!)
+            // Update Screen
             document.getElementById('display-name').innerText = finalName;
             document.getElementById('welcome-msg').innerText = `Welcome back, ${finalName}`;
         }
 
-        // Run the loader immediately
+        // Run immediately
         loadUser();
 
         // 2. WHATSAPP SALES FUNCTION
         function contactSales(plan) {
             const phoneNumber = "27616520417"; 
             let message = "";
-            
-            // Get the current user's name to add to the message
             const currentName = document.getElementById('display-name').innerText;
 
             switch(plan) {
@@ -217,8 +214,8 @@
         // 3. LOGOUT / DISCONNECT
         function logout() {
             localStorage.clear();
-            // Reload the page and clear URL parameters
-            window.location.href = window.location.pathname; 
+            // Redirect to Login Page
+            window.location.href = 'login.html'; 
         }
     </script>
 </body>
