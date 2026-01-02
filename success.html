@@ -5,65 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Automania | Sequence Complete</title>
     <style>
-        :root {
-            --bg-color: #000000;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
-            --accent: #32D74B; /* Success Green */
-            --text: #ffffff;
-        }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-color); color: var(--text); height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-
-        .container {
-            width: 85%; max-width: 500px;
-            padding: 40px; border-radius: 24px;
-            background: var(--glass-bg); border: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .icon-circle {
-            width: 80px; height: 80px; margin: 0 auto 30px;
-            background: rgba(50, 215, 75, 0.1);
-            border: 2px solid var(--accent);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 40px; box-shadow: 0 0 30px rgba(50, 215, 75, 0.2);
-        }
-
-        h1 { font-size: 28px; margin-bottom: 10px; letter-spacing: -1px; }
-        p { color: #888; line-height: 1.6; margin-bottom: 30px; font-size: 16px; }
-        
-        .email-box {
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px;
-            border: 1px solid var(--border); margin-bottom: 30px;
-            font-family: monospace; color: var(--accent);
-        }
-
-        .btn {
-            display: inline-block; padding: 16px 40px;
-            background: white; color: black;
-            text-decoration: none; border-radius: 30px;
-            font-weight: 600; transition: 0.3s; cursor: pointer;
-        }
-        .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.4); }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        :root { --bg: #000; --accent: #32D74B; --glass: rgba(255,255,255,0.05); }
+        body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: white; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .card { width: 90%; max-width: 450px; padding: 40px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; backdrop-filter: blur(20px); }
+        .icon { font-size: 50px; margin-bottom: 20px; }
+        h1 { font-size: 24px; margin-bottom: 10px; }
+        .details { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px; margin: 25px 0; text-align: left; border-left: 3px solid var(--accent); }
+        .label { color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .value { color: var(--accent); font-family: monospace; font-size: 16px; margin-bottom: 10px; display: block; }
+        .btn { display: block; padding: 16px; background: white; color: black; text-decoration: none; border-radius: 12px; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="icon-circle">📩</div>
-        <h1>Registration Sequence Complete</h1>
-        <p>Your secure agent profile has been created on the Automania servers.</p>
-        
-        <div class="email-box">
-            STATUS: AWAITING ACTIVATION<br>
-            ACTION: CHECK YOUR EMAIL
+    <div class="card">
+        <div class="icon">🛡️</div>
+        <h1>Agent Initialized</h1>
+        <p style="color:#888">Your profile has been synced to the network.</p>
+
+        <div class="details">
+            <span class="label">Assigned Name</span>
+            <span class="value" id="res-name">Loading...</span>
+            
+            <span class="label">Secure Agent ID</span>
+            <span class="value" id="res-id">Generating...</span>
+            
+            <span class="label">Recovery Email</span>
+            <span class="value" id="res-email">...</span>
         </div>
 
-        <p>We have sent a secure <b>Agent ID</b> to your inbox.<br>You will need it to unlock the dashboard.</p>
-        
+        <p style="font-size: 13px; color: #666; margin-bottom: 20px;">An encrypted copy of your ID has been sent to your inbox.</p>
         <a href="login.html" class="btn">Proceed to Login</a>
     </div>
+
+    <script>
+        // Pull data from the URL that n8n sent
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('res-name').innerText = params.get('name') || "Agent";
+        document.getElementById('res-id').innerText = params.get('agent_id') || "Check Email";
+        document.getElementById('res-email').innerText = params.get('email') || "System secure";
+    </script>
 </body>
 </html>
