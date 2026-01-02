@@ -10,8 +10,9 @@
             --card-bg: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
             --accent: #0A84FF;
+            --gold: #FFD700;
         }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: white; padding-bottom: 50px; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: white; padding-bottom: 80px; }
 
         /* HEADER */
         header {
@@ -19,7 +20,7 @@
             padding: 20px 40px; border-bottom: 1px solid var(--border);
             backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; background: rgba(0,0,0,0.8);
         }
-        .logo { font-weight: 700; font-size: 20px; letter-spacing: 2px; }
+        .logo { font-weight: 700; font-size: 20px; letter-spacing: 2px; cursor: pointer; }
         .user-pill {
             background: var(--card-bg); padding: 8px 16px; border-radius: 20px;
             border: 1px solid var(--border); font-size: 14px; display: flex; align-items: center; gap: 10px;
@@ -44,15 +45,17 @@
             background: var(--card-bg); border: 1px solid var(--border);
             border-radius: 24px; padding: 30px; transition: 0.3s;
             display: flex; flex-direction: column; justify-content: space-between;
+            position: relative;
         }
         .card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(10, 132, 255, 0.15); }
         
         .tier-name { color: #888; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-        .price { font-size: 32px; font-weight: 700; margin-bottom: 20px; }
-        .price span { font-size: 14px; color: #666; font-weight: 400; }
+        .price { font-size: 36px; font-weight: 700; margin-bottom: 20px; letter-spacing: -1px; }
+        .price span { font-size: 14px; color: #666; font-weight: 400; margin-left: 5px; letter-spacing: 0; }
         
         ul { list-style: none; padding: 0; margin: 0 0 30px 0; color: #ccc; font-size: 15px; line-height: 2.2; }
         ul li::before { content: "•"; color: var(--accent); margin-right: 10px; }
+        ul li.highlight::before { content: "★"; color: var(--gold); }
 
         .btn-card {
             width: 100%; padding: 14px; background: white; color: black;
@@ -62,8 +65,28 @@
         .btn-card.outline { background: transparent; border: 1px solid #444; color: white; }
         .btn-card.outline:hover { border-color: white; }
 
-        /* CURRENT PLAN HIGHLIGHT */
-        .current-plan { border: 1px solid var(--accent); box-shadow: 0 0 20px rgba(10, 132, 255, 0.2); }
+        /* RECOMMENDED PLAN HIGHLIGHT */
+        .recommended { border: 1px solid var(--accent); box-shadow: 0 0 20px rgba(10, 132, 255, 0.2); }
+        .badge {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* CUSTOM SECTION */
+        .custom-section {
+            max-width: 1200px; margin: 40px auto; padding: 40px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px dashed #444; border-radius: 24px; text-align: center;
+        }
+        .custom-section h3 { font-size: 24px; margin-bottom: 10px; color: white; }
+        .custom-section p { color: #888; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6; }
+        .btn-custom {
+            padding: 12px 30px; background: transparent; border: 1px solid var(--accent);
+            color: var(--accent); border-radius: 30px; cursor: pointer; font-size: 14px; transition: 0.3s;
+        }
+        .btn-custom:hover { background: var(--accent); color: white; }
+
     </style>
 </head>
 <body>
@@ -81,53 +104,63 @@
 
     <div class="hero">
         <h1 id="welcome-msg">System Active</h1>
-        <p class="subtitle">Select a module to upgrade your automation capabilities.</p>
+        <p class="subtitle">Select your automation infrastructure level.</p>
     </div>
 
     <div class="grid">
         <div class="card">
             <div>
                 <div class="tier-name">Protocol Alpha</div>
-                <div class="price">Free<span>/mo</span></div>
+                <div class="price">R1,499<span>/mo</span></div>
                 <ul>
-                    <li>Basic Automation Agent</li>
-                    <li>500 Webhook Calls</li>
-                    <li>Community Support</li>
-                    <li>Standard Dashboard</li>
+                    <li>5-Page Custom Website</li>
+                    <li>Google Business Profile Setup</li>
+                    <li>Basic AI Web-Bot</li>
+                    <li>.co.za Domain Included</li>
+                    <li>Standard Hosting & SSL</li>
                 </ul>
             </div>
-            <button class="btn-card outline">Current Plan</button>
+            <button class="btn-card outline" onclick="contactSales('Alpha')">Initialize Alpha</button>
         </div>
 
-        <div class="card current-plan">
+        <div class="card recommended">
+            <div class="badge">Most Popular</div>
             <div>
                 <div class="tier-name" style="color: #0A84FF;">Protocol Beta</div>
-                <div class="price">$29<span>/mo</span></div>
+                <div class="price">R3,999<span>/mo</span></div>
                 <ul>
-                    <li>AI Chatbot Integration</li>
-                    <li>Unlimited Webhooks</li>
-                    <li>Priority Email Support</li>
-                    <li>Custom Domain Setup</li>
-                    <li><b>Data Retention: 30 Days</b></li>
+                    <li>Everything in Alpha</li>
+                    <li class="highlight" style="color: white;">WhatsApp AI Agent Integration</li>
+                    <li>Lead Capture Automation</li>
+                    <li>Appointment Booking System</li>
+                    <li>Priority Support (Same Day)</li>
+                    <li>Monthly SEO Report</li>
                 </ul>
             </div>
-            <button class="btn-card" style="background: #0A84FF; color: white;">Upgrade Now</button>
+            <button class="btn-card" style="background: #0A84FF; color: white;" onclick="contactSales('Beta')">Deploy Beta</button>
         </div>
 
         <div class="card">
             <div>
                 <div class="tier-name">Protocol Omega</div>
-                <div class="price">$99<span>/mo</span></div>
+                <div class="price">R9,999<span>/mo</span></div>
                 <ul>
-                    <li>Full Agency Suite</li>
-                    <li>Dedicated Server Instance</li>
-                    <li>24/7 Live Support</li>
-                    <li>White-label Solutions</li>
-                    <li>Custom AI Model Training</li>
+                    <li>Everything in Beta</li>
+                    <li class="highlight" style="color: white;">Full Business Dashboard</li>
+                    <li>CRM Integration (HubSpot/Salesforce)</li>
+                    <li>Review Automation System</li>
+                    <li>Competitor Analysis</li>
+                    <li>Dedicated Account Manager</li>
                 </ul>
             </div>
-            <button class="btn-card outline">Contact Sales</button>
+            <button class="btn-card outline" onclick="contactSales('Omega')">Activate Omega</button>
         </div>
+    </div>
+
+    <div class="custom-section">
+        <h3>Tailored Architecture</h3>
+        <p>Need a specialized solution? We build custom AI infrastructures for large-scale operations, including proprietary model training, internal tool creation, and enterprise-grade security.</p>
+        <button class="btn-custom" onclick="contactSales('Custom')">Request Custom Quotation</button>
     </div>
 
     <script>
@@ -148,6 +181,38 @@
         function logout() {
             localStorage.clear();
             window.location.href = 'login.html';
+        }
+
+        // 3. WHATSAPP SALES FUNCTION (UPDATED)
+        function contactSales(plan) {
+            // Your number in international format (no leading 0, add 27)
+            const phoneNumber = "27616520417"; 
+            
+            let message = "";
+            
+            // Customize message based on button clicked
+            switch(plan) {
+                case 'Alpha':
+                    message = "Hello Automania, I would like to initialize the Protocol Alpha (Starter) plan for my business.";
+                    break;
+                case 'Beta':
+                    message = "Hello Automania, I am interested in deploying the Protocol Beta (Automation) plan with the WhatsApp Agent.";
+                    break;
+                case 'Omega':
+                    message = "Hello Automania, I need to discuss the Protocol Omega (Executive) plan and the Business Dashboard.";
+                    break;
+                case 'Custom':
+                    message = "Hello Automania, I am looking for a tailored AI architecture and custom quotation.";
+                    break;
+                default:
+                    message = "Hello Automania, I am interested in your services.";
+            }
+
+            // Encode the message for URL
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Open in new tab
+            window.open(url, '_blank');
         }
     </script>
 </body>
