@@ -26,7 +26,7 @@
             border: 1px solid var(--border); font-size: 14px; display: flex; align-items: center; gap: 10px;
         }
         .status-dot { width: 8px; height: 8px; background: #32D74B; border-radius: 50%; box-shadow: 0 0 10px #32D74B; }
-        .logout { color: #888; text-decoration: none; font-size: 14px; margin-left: 20px; transition: 0.3s; }
+        .logout { color: #888; text-decoration: none; font-size: 14px; margin-left: 20px; transition: 0.3s; cursor: pointer; }
         .logout:hover { color: white; }
 
         /* HERO */
@@ -96,9 +96,9 @@
         <div style="display: flex; align-items: center;">
             <div class="user-pill">
                 <div class="status-dot"></div>
-                <span id="display-name">Agent</span>
+                <span id="display-name">Loading...</span>
             </div>
-            <a href="#" onclick="logout()" class="logout">Disconnect</a>
+            <a onclick="logout()" class="logout">Disconnect</a>
         </div>
     </header>
 
@@ -164,55 +164,61 @@
     </div>
 
     <script>
-        // 1. Check if user is logged in
-        const userName = localStorage.getItem('automania_name');
-        const userId = localStorage.getItem('automania_id');
+        // 1. INTELLIGENT NAME LOADER
+        // This function checks 3 places for the name to ensure it never fails.
+        function loadUser() {
+            // Check URL Parameters first (e.g., website.com?name=Pule)
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlName = urlParams.get('name');
 
-        if (!userId) {
-            // If no ID found, kick them back to login
-            window.location.href = 'login.html';
-        } else {
-            // Update the UI with their name
-            document.getElementById('display-name').innerText = userName || "Agent";
-            document.getElementById('welcome-msg').innerText = `Welcome back, ${userName}`;
+            // Check Local Storage second (if they logged in before)
+            const localName = localStorage.getItem('automania_name');
+
+            // Determine final name (Fallback to "Agent" if nothing found)
+            const finalName = urlName || localName || "Agent";
+
+            // Update the UI
+            document.getElementById('display-name').innerText = finalName;
+            document.getElementById('welcome-msg').innerText = `Welcome back, ${finalName}`;
         }
 
-        // 2. Logout Function
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
-        }
+        // Run the loader immediately
+        loadUser();
 
-        // 3. WHATSAPP SALES FUNCTION (UPDATED)
+        // 2. WHATSAPP SALES FUNCTION
         function contactSales(plan) {
-            // Your number in international format (no leading 0, add 27)
             const phoneNumber = "27616520417"; 
-            
             let message = "";
             
-            // Customize message based on button clicked
+            // Get the current user's name to add to the message
+            const currentName = document.getElementById('display-name').innerText;
+
             switch(plan) {
                 case 'Alpha':
-                    message = "Hello Automania, I would like to initialize the Protocol Alpha (Starter) plan for my business.";
+                    message = `Hello Automania (Agent ${currentName}), I would like to initialize the Protocol Alpha (Starter) plan.`;
                     break;
                 case 'Beta':
-                    message = "Hello Automania, I am interested in deploying the Protocol Beta (Automation) plan with the WhatsApp Agent.";
+                    message = `Hello Automania (Agent ${currentName}), I am interested in deploying the Protocol Beta (Automation) plan with the WhatsApp Agent.`;
                     break;
                 case 'Omega':
-                    message = "Hello Automania, I need to discuss the Protocol Omega (Executive) plan and the Business Dashboard.";
+                    message = `Hello Automania (Agent ${currentName}), I need to discuss the Protocol Omega (Executive) plan and Dashboard.`;
                     break;
                 case 'Custom':
-                    message = "Hello Automania, I am looking for a tailored AI architecture and custom quotation.";
+                    message = `Hello Automania (Agent ${currentName}), I am looking for a tailored AI architecture and custom quotation.`;
                     break;
                 default:
                     message = "Hello Automania, I am interested in your services.";
             }
 
-            // Encode the message for URL
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            
-            // Open in new tab
             window.open(url, '_blank');
+        }
+
+        // 3. LOGOUT / DISCONNECT
+        function logout() {
+            localStorage.clear();
+            // Just reload the page, cleaning up the URL
+            window.location.href = window.location.pathname; 
         }
     </script>
 </body>
