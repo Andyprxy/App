@@ -165,19 +165,19 @@
 
     <script>
         // 1. INTELLIGENT NAME LOADER
-        // This function checks 3 places for the name to ensure it never fails.
+        // This makes the code work in BOTH n8n and as a static file.
         function loadUser() {
-            // Check URL Parameters first (e.g., website.com?name=Pule)
+            // A. Check URL Parameters (e.g., ?name=Pule)
             const urlParams = new URLSearchParams(window.location.search);
             const urlName = urlParams.get('name');
 
-            // Check Local Storage second (if they logged in before)
+            // B. Check Local Storage (if they logged in via your login page)
             const localName = localStorage.getItem('automania_name');
 
-            // Determine final name (Fallback to "Agent" if nothing found)
+            // C. Fallback to "Agent" if nothing is found
             const finalName = urlName || localName || "Agent";
 
-            // Update the UI
+            // Update the screen safely (No {{ }} errors possible!)
             document.getElementById('display-name').innerText = finalName;
             document.getElementById('welcome-msg').innerText = `Welcome back, ${finalName}`;
         }
@@ -217,7 +217,7 @@
         // 3. LOGOUT / DISCONNECT
         function logout() {
             localStorage.clear();
-            // Just reload the page, cleaning up the URL
+            // Reload the page and clear URL parameters
             window.location.href = window.location.pathname; 
         }
     </script>
