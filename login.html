@@ -5,96 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Automania | Secure Login</title>
     <style>
-        :root { --bg: #000000; --card-bg: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); --accent: #0A84FF; --text-secondary: #888; }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: white; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: var(--card-bg); border: 1px solid var(--border); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; backdrop-filter: blur(20px); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
-        .logo { font-size: 24px; font-weight: 800; letter-spacing: 4px; margin-bottom: 10px; background: linear-gradient(90deg, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 30px; }
-        input { width: 100%; padding: 14px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; color: white; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(10, 132, 255, 0.2); }
-        button { width: 100%; padding: 16px; background: var(--accent); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        button:hover { opacity: 0.9; transform: translateY(-2px); }
-        .footer-link { display: block; margin-top: 20px; color: var(--text-secondary); text-decoration: none; font-size: 12px; }
-        .footer-link:hover { color: white; }
-        .error-msg { color: #ff3b30; font-size: 14px; margin-bottom: 15px; display: none; }
+        :root { --bg: #000000; --card-bg: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); --accent: #0A84FF; }
+        body { margin: 0; font-family: sans-serif; background: var(--bg); color: white; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: var(--card-bg); border: 1px solid var(--border); padding: 40px; border-radius: 24px; text-align: center; width: 100%; max-width: 400px; }
+        input { width: 100%; padding: 14px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; color: white; margin-bottom: 15px; box-sizing: border-box; }
+        button { width: 100%; padding: 16px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
     <div class="login-card">
-        <div class="logo">AUTOMANIA</div>
-        <div class="subtitle">Identify yourself to access the command center.</div>
-
-        <div id="error-display" class="error-msg">Authorization Failed</div>
-
-        <form id="loginForm">
-            <input type="email" id="email" placeholder="Authorized Email" required>
-            <input type="text" id="agent_id" placeholder="Agent ID (e.g. AGENT-001)" required>
-            <button type="submit" id="submitBtn">Authenticate</button>
+        <h2 style="letter-spacing: 2px;">AUTOMANIA</h2>
+        <p style="color: #888; margin-bottom: 30px;">Secure Command Center</p>
+        
+        <form action="https://my-n8n-server-npma.onrender.com/webhook/login" method="POST">
+            <input type="email" name="email" placeholder="Authorized Email" required>
+            <input type="text" name="agent_id" placeholder="Agent ID" required>
+            <button type="submit">Authenticate</button>
         </form>
-
-        <a href="register.html" class="footer-link">Request New Agent Access</a>
     </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); // STOP the form from redirecting you to n8n
-            
-            const btn = document.getElementById('submitBtn');
-            const errorDisplay = document.getElementById('error-display');
-            
-            // 1. Show Loading State
-            btn.innerText = "Verifying...";
-            btn.style.opacity = "0.7";
-            errorDisplay.style.display = "none";
-
-            // 2. Prepare Data
-            const email = document.getElementById('email').value;
-            const agentId = document.getElementById('agent_id').value;
-
-            try {
-                // 3. Send to n8n in the background
-                const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        email: email, 
-                        agent_id: agentId 
-                    })
-                });
-
-                // 4. Handle the Response
-                if (response.ok) {
-                    // Get the Dashboard HTML from n8n
-                    const dashboardHTML = await response.text();
-                    
-                    // IF n8n sent the dashboard HTML properly:
-                    if (dashboardHTML.includes("<!DOCTYPE html>")) {
-                        // "Paint" the dashboard over the current window
-                        document.open();
-                        document.write(dashboardHTML);
-                        document.close();
-                        
-                        // Save name for the dashboard to use
-                        // (Optional: You can ask n8n to send the name in headers, but for now we use "Agent")
-                        localStorage.setItem('automania_name', 'Agent'); 
-                    } else {
-                        // n8n didn't send HTML (maybe it sent "ID Not Found")
-                        throw new Error("Invalid Credentials");
-                    }
-                } else {
-                    throw new Error("Server Connection Failed");
-                }
-
-            } catch (error) {
-                // 5. Show Error if it failed
-                btn.innerText = "Authenticate";
-                btn.style.opacity = "1";
-                errorDisplay.innerText = "Access Denied: ID or Email not found.";
-                errorDisplay.style.display = "block";
-                console.error(error);
-            }
-        });
-    </script>
 </body>
 </html>
