@@ -3,150 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automania | Command Center</title>
+    <title>Automania | Dashboard</title>
     <style>
-        :root { --bg: #000000; --card-bg: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); --accent: #0A84FF; --gold: #FFD700; }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: white; padding-bottom: 80px; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; background: rgba(0,0,0,0.8); }
-        .logo { font-weight: 700; font-size: 20px; letter-spacing: 2px; cursor: pointer; }
-        .user-pill { background: var(--card-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); font-size: 14px; display: flex; align-items: center; gap: 10px; }
-        .status-dot { width: 8px; height: 8px; background: #32D74B; border-radius: 50%; box-shadow: 0 0 10px #32D74B; }
-        .logout { color: #888; text-decoration: none; font-size: 14px; margin-left: 20px; transition: 0.3s; cursor: pointer; }
-        .logout:hover { color: white; }
-        .hero { text-align: center; padding: 60px 20px; }
-        h1 { font-size: 40px; margin: 0 0 10px 0; background: linear-gradient(90deg, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { color: #666; font-size: 18px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 30px; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(10, 132, 255, 0.15); }
-        .tier-name { color: #888; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-        .price { font-size: 36px; font-weight: 700; margin-bottom: 20px; letter-spacing: -1px; }
-        .price span { font-size: 14px; color: #666; font-weight: 400; margin-left: 5px; letter-spacing: 0; }
-        ul { list-style: none; padding: 0; margin: 0 0 30px 0; color: #ccc; font-size: 15px; line-height: 2.2; }
-        ul li::before { content: "•"; color: var(--accent); margin-right: 10px; }
-        ul li.highlight::before { content: "★"; color: var(--gold); }
-        .btn-card { width: 100%; padding: 14px; background: white; color: black; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; opacity: 0.9; transition: 0.2s; }
-        .btn-card:hover { opacity: 1; }
-        .btn-card.outline { background: transparent; border: 1px solid #444; color: white; }
-        .btn-card.outline:hover { border-color: white; }
-        .recommended { border: 1px solid var(--accent); box-shadow: 0 0 20px rgba(10, 132, 255, 0.2); }
-        .badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .custom-section { max-width: 1200px; margin: 40px auto; padding: 40px; background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%); border: 1px dashed #444; border-radius: 24px; text-align: center; }
-        .custom-section h3 { font-size: 24px; margin-bottom: 10px; color: white; }
-        .custom-section p { color: #888; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6; }
-        .btn-custom { padding: 12px 30px; background: transparent; border: 1px solid var(--accent); color: var(--accent); border-radius: 30px; cursor: pointer; font-size: 14px; transition: 0.3s; }
-        .btn-custom:hover { background: var(--accent); color: white; }
+        :root { --bg: #000; --accent: #0A84FF; --glass: rgba(255,255,255,0.05); }
+        body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: white; }
+        nav { padding: 20px 40px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .container { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
+        .welcome-card { background: linear-gradient(135deg, #111, #000); padding: 40px; border-radius: 24px; border: 1px solid var(--accent); margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .module { background: var(--glass); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .module:hover { border-color: var(--accent); background: rgba(10, 132, 255, 0.05); }
+        .tag { font-size: 10px; color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 10px; text-transform: uppercase; }
+        .logout-btn { color: #ff3b30; cursor: pointer; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
+    <nav>
+        <div style="font-weight:bold; letter-spacing:2px;">AUTOMANIA</div>
+        <a onclick="logout()" class="logout-btn">Terminate Session</a>
+    </nav>
 
-    <header>
-        <div class="logo">AUTOMANIA</div>
-        <div style="display: flex; align-items: center;">
-            <div class="user-pill">
-                <div class="status-dot"></div>
-                <span id="display-name">Agent</span>
-            </div>
-            <a onclick="logout()" class="logout">Disconnect</a>
-        </div>
-    </header>
-
-    <div class="hero">
-        <h1 id="welcome-msg">System Active</h1>
-        <p class="subtitle">Select your automation infrastructure level.</p>
-    </div>
-
-    <div class="grid">
-        <div class="card">
-            <div>
-                <div class="tier-name">Protocol Alpha</div>
-                <div class="price">R1,499<span>/mo</span></div>
-                <ul>
-                    <li>5-Page Custom Website</li>
-                    <li>Google Business Profile Setup</li>
-                    <li>Basic AI Web-Bot</li>
-                    <li>.co.za Domain Included</li>
-                    <li>Standard Hosting & SSL</li>
-                </ul>
-            </div>
-            <button class="btn-card outline" onclick="contactSales('Alpha')">Initialize Alpha</button>
+    <div class="container">
+        <div class="welcome-card">
+            <span class="tag" id="user-plan">Standard Access</span>
+            <h1 style="margin: 15px 0 5px 0;">Welcome, <span id="user-name">Agent</span></h1>
+            <p style="color: #888; margin: 0;">System Status: <span style="color:#32D74B">Online</span> | ID: <span id="user-id">...</span></p>
         </div>
 
-        <div class="card recommended">
-            <div class="badge">Most Popular</div>
-            <div>
-                <div class="tier-name" style="color: #0A84FF;">Protocol Beta</div>
-                <div class="price">R3,999<span>/mo</span></div>
-                <ul>
-                    <li>Everything in Alpha</li>
-                    <li class="highlight" style="color: white;">WhatsApp AI Agent Integration</li>
-                    <li>Lead Capture Automation</li>
-                    <li>Appointment Booking System</li>
-                    <li>Priority Support (Same Day)</li>
-                    <li>Monthly SEO Report</li>
-                </ul>
+        <h2 style="font-size: 18px; margin-bottom: 20px; color: #888;">Active Modules</h2>
+        <div class="grid">
+            <div class="module">
+                <h3>Automations</h3>
+                <p style="font-size: 14px; color: #666;">View and manage your n8n workflow triggers.</p>
+                <div style="color: var(--accent); font-size: 13px;">3 Active →</div>
             </div>
-            <button class="btn-card" style="background: #0A84FF; color: white;" onclick="contactSales('Beta')">Deploy Beta</button>
-        </div>
-
-        <div class="card">
-            <div>
-                <div class="tier-name">Protocol Omega</div>
-                <div class="price">R9,999<span>/mo</span></div>
-                <ul>
-                    <li>Everything in Beta</li>
-                    <li class="highlight" style="color: white;">Full Business Dashboard</li>
-                    <li>CRM Integration (HubSpot/Salesforce)</li>
-                    <li>Review Automation System</li>
-                    <li>Competitor Analysis</li>
-                    <li>Dedicated Account Manager</li>
-                </ul>
+            <div class="module">
+                <h3>Database</h3>
+                <p style="font-size: 14px; color: #666;">Direct access to your Supabase agent records.</p>
+                <div style="color: var(--accent); font-size: 13px;">Connected →</div>
             </div>
-            <button class="btn-card outline" onclick="contactSales('Omega')">Activate Omega</button>
+            <div class="module">
+                <h3>Metrics</h3>
+                <p style="font-size: 14px; color: #666;">Real-time resource and memory tracking.</p>
+                <div style="color: var(--accent); font-size: 13px;">Optimal →</div>
+            </div>
         </div>
-    </div>
-
-    <div class="custom-section">
-        <h3>Tailored Architecture</h3>
-        <p>Need a specialized solution? We build custom AI infrastructures for large-scale operations, including proprietary model training, internal tool creation, and enterprise-grade security.</p>
-        <button class="btn-custom" onclick="contactSales('Custom')">Request Custom Quotation</button>
     </div>
 
     <script>
-        // 1. INTELLIGENT NAME LOADER
-        function loadUser() {
-            // Check URL Parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlName = urlParams.get('name');
-            const localName = localStorage.getItem('automania_name');
-            const finalName = urlName || localName || "Agent";
+        // Load session data
+        const name = localStorage.getItem('automania_name');
+        const id = localStorage.getItem('automania_id');
+        const plan = localStorage.getItem('automania_plan');
 
-            document.getElementById('display-name').innerText = finalName;
-            document.getElementById('welcome-msg').innerText = `Welcome back, ${finalName}`;
-        }
-        loadUser();
-
-        // 2. WHATSAPP SALES FUNCTION
-        function contactSales(plan) {
-            const phoneNumber = "27616520417"; 
-            let message = "";
-            const currentName = document.getElementById('display-name').innerText;
-
-            switch(plan) {
-                case 'Alpha': message = `Hello Automania (Agent ${currentName}), I would like to initialize the Protocol Alpha (Starter) plan.`; break;
-                case 'Beta': message = `Hello Automania (Agent ${currentName}), I am interested in deploying the Protocol Beta (Automation) plan with the WhatsApp Agent.`; break;
-                case 'Omega': message = `Hello Automania (Agent ${currentName}), I need to discuss the Protocol Omega (Executive) plan and Dashboard.`; break;
-                case 'Custom': message = `Hello Automania (Agent ${currentName}), I am looking for a tailored AI architecture and custom quotation.`; break;
-                default: message = "Hello Automania, I am interested in your services.";
-            }
-
-            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
+        if (!id) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('user-name').innerText = name || "Agent";
+            document.getElementById('user-id').innerText = id;
+            if (plan) document.getElementById('user-plan').innerText = plan + " Access";
         }
 
         function logout() {
             localStorage.clear();
-            window.location.href = 'login.html'; 
+            window.location.href = 'index.html';
         }
     </script>
 </body>
