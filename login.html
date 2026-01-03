@@ -71,7 +71,7 @@
             feedback.style.display = "none";
 
             try {
-                // PRODUCTION URL (removed -test)
+                // PRODUCTION URL (Points to the live webhook)
                 const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -81,14 +81,14 @@
                     })
                 });
 
-                if (!response.ok) throw new Error("Server error");
+                if (!response.ok) throw new Error("Server communication failed");
 
                 const result = await response.json();
 
                 // Verification Handshake
                 if (result.status === "approved" || result.status === "success") {
                     
-                    // Store Session Details
+                    // Store Session Details locally for the dashboard
                     localStorage.setItem('automania_id', result.agent_id || idInput);
                     localStorage.setItem('automania_name', result.name || "Agent");
                     localStorage.setItem('automania_email', result.email || emailInput);
@@ -98,9 +98,9 @@
 
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
-                    }, 1000);
+                    }, 800);
                 } else {
-                    throw new Error("Denied");
+                    throw new Error("Credentials Invalid");
                 }
 
             } catch (error) {
