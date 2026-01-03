@@ -13,7 +13,17 @@
             --text-primary: #ffffff;
             --text-secondary: #86868b;
         }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background-color: var(--bg-color); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        body { 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-primary); 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
         
         .glass-card {
             width: 85%; max-width: 400px; background: var(--glass-bg);
@@ -47,10 +57,10 @@
         <h2>Welcome Back</h2>
         <form id="login-form">
             <label>Email Address</label>
-            <input type="email" id="login-email" placeholder="neo@matrix.com" required>
+            <input type="email" id="login-email" placeholder="agent@automania.com" required>
 
             <label>Agent ID (Password)</label>
-            <input type="text" id="login-id" placeholder="AGENT-XXX" required>
+            <input type="text" id="login-id" placeholder="AND 123" required>
 
             <button type="submit" id="submit-btn" class="btn-submit">Restore Session</button>
             <p id="feedback" class="error-msg"></p>
@@ -71,7 +81,7 @@
             feedback.style.display = "none";
 
             try {
-                // PRODUCTION URL (Points to the live webhook)
+                // Ensure n8n workflow is ACTIVE to use this Production URL
                 const response = await fetch('https://my-n8n-server-npma.onrender.com/webhook/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -81,26 +91,27 @@
                     })
                 });
 
-                if (!response.ok) throw new Error("Server communication failed");
+                if (!response.ok) throw new Error("Connection Error");
 
                 const result = await response.json();
 
-                // Verification Handshake
-                if (result.status === "approved" || result.status === "success") {
+                // HANDSHAKE: Checks if n8n sent the 'approved' status
+                if (result.status === "approved") {
                     
-                    // Store Session Details locally for the dashboard
-                    localStorage.setItem('automania_id', result.agent_id || idInput);
-                    localStorage.setItem('automania_name', result.name || "Agent");
-                    localStorage.setItem('automania_email', result.email || emailInput);
+                    // Store details locally for session persistence
+                    localStorage.setItem('automania_id', idInput);
+                    localStorage.setItem('automania_name', result.name);
+                    localStorage.setItem('automania_plan', result.plan);
 
                     btn.innerText = "Access Granted";
                     btn.style.backgroundColor = "#32D74B";
 
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 800);
+                        // Redirecting to success.html per your request
+                        window.location.href = 'success.html';
+                    }, 1000);
                 } else {
-                    throw new Error("Credentials Invalid");
+                    throw new Error("Denied");
                 }
 
             } catch (error) {
